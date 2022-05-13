@@ -28,19 +28,7 @@ jobs:
         
     - name: Get current date
       id: date
-      run: echo "::set-output name=today::$(date +'%Y-%m-%d')"   
-  
-    - name: Create Release
-      id: create_release
-      uses: actions/create-release@v1
-      env:
-        GITHUB_TOKEN: ${{ secrets.PACKAGE_TOKEN }}
-      with:
-        tag_name: ${{ github.ref }}
-        release_name: Release ${{ github.ref }}
-        draft: false
-        prerelease: false
-    
+      run: echo "::set-output name=today::$(date +'%Y-%m-%d')"    
         
     - name: Upload Release Asset
       id: upload-release-asset
@@ -48,7 +36,7 @@ jobs:
       env:
         GITHUB_TOKEN: ${{ secrets.PACKAGE_TOKEN }}
       with:
-        upload_url: ${{ steps.create_release.outputs.upload_url }}
+        upload_url: ${{ github.event.release.upload_url }}
         asset_path: /workdir/trilium-trans-release/
         asset_name: |
           trilium-linux-x64-*.tar.xz
