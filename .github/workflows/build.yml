@@ -13,6 +13,18 @@ jobs:
 
     - name: Initialization environment
       run: |
+        sudo rm -rf /etc/apt/sources.list.d/* /usr/share/dotnet /usr/local/lib/android /opt/ghc
+        sudo -E apt-get -qq update
+        sudo -E apt-get -qq install $(curl -fsSL git.io/depends-ubuntu-2004)
+        sudo -E apt-get -qq autoremove --purge
+        sudo -E apt-get -qq clean
+        sudo pip3 install requests --user
+        curl -sL https://deb.nodesource.com/setup_16.x | sudo -E bash -
+        sudo -E apt-get -qq install nodejs
+        sudo -E apt-get -qq install build-essential        
+        npm install -g asar
+        npm install -g webpack
+        npm install -g webpack-cli        
         sudo mkdir -p /workdir
         sudo chmod -R 777 /workdir
         rm translations.py && cp translations_cn.py translations.py
@@ -25,5 +37,10 @@ jobs:
         tar -xf trilium-linux-x64-0.51.2.tar.xz && mv trilium-linux-x64 /workdir/trilium-trans/
         cd /workdir/trilium-trans
         ls
+        
+    - name: Translate
+      run: |
+        wget https://raw.githubusercontent.com/wrhsd1/files/main/trans.py
+        python3 trans.py
         
         
