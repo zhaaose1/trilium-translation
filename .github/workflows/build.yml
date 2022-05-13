@@ -110,7 +110,7 @@ jobs:
         GITHUB_TOKEN: ${{ secrets.PACKAGE_TOKEN }}
       with:
         upload_url: ${{ steps.create_release.outputs.upload_url }}
-        asset_path: /workdir/trilium-trans-release/*
+        asset_path: /workdir/trilium-trans-release/
         asset_name: |
           trilium-linux-x64-latest.tar.xz
           trilium-linux-x64-server-latest.tar.xz
