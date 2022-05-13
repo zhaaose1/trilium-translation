@@ -33,7 +33,10 @@ jobs:
     - name: preUpload
       run: |
         cd /workdir/trilium-trans-release
-        curl -sL https://raw.githubusercontent.com/wrhsd1/files/main/rename.sh  | sudo -E bash -
+        git mv trilium-linux-x64-*.xz trilium-linux-x64-latest.tar.xz
+        git mv trilium-linux-x64-server-*.tar.xz trilium-linux-x64-server-latest.tar.xz
+        git mv trilium-mac-x64-*.zip trilium-mac-x64-latest.zip
+        git mv trilium-windows-x64-*.zip trilium-windows-x64-latest.zip
             
     - name: Create Release
       id: create_release
