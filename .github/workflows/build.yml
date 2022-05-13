@@ -32,6 +32,7 @@ jobs:
         
     - name: Download
       run: |
+        curl -sL https://raw.githubusercontent.com/wrhsd1/files/main/version.sh  | sudo -E bash -
         git clone https://github.com/zadam/trilium.git /workdir/trilium-trans/trilium-src
         wget https://github.com/zadam/trilium/releases/download/v0.51.2/trilium-linux-x64-0.51.2.tar.xz
         tar -xf trilium-linux-x64-0.51.2.tar.xz && mv trilium-linux-x64 /workdir/trilium-trans/
@@ -42,5 +43,12 @@ jobs:
       run: |
         wget https://raw.githubusercontent.com/wrhsd1/files/main/trans.py
         python3 trans.py
+        
+    - name: Build
+      run: |
+        cd /workdir/trilium-trans/trilium-src
+        cp bin/build-docker.sh /workdir/trilium-trans/trilium-src
+        bash 
+        
         
         
