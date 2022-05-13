@@ -33,10 +33,10 @@ jobs:
     - name: preUpload
       run: |
         cd /workdir/trilium-trans-release/
-        mv /workdir/trilium-trans-release/trilium-linux-x64-*.xz /workdir/trilium-trans-release/trilium-linux-x64-latest.tar.xz
-        mv /workdir/trilium-trans-release/trilium-linux-x64-server-*.tar.xz /workdir/trilium-trans-release/trilium-linux-x64-server-latest.tar.xz
-        mv /workdir/trilium-trans-release/trilium-mac-x64-*.zip /workdir/trilium-trans-release/trilium-mac-x64-latest.zip
-        mv /workdir/trilium-trans-release/trilium-windows-x64-*.zip /workdir/trilium-trans-release/trilium-windows-x64-latest.zip
+        mv -f /workdir/trilium-trans-release/trilium-linux-x64-*.xz /workdir/trilium-trans-release/trilium-linux-x64-latest.tar.xz
+        mv -f /workdir/trilium-trans-release/trilium-linux-x64-server-*.tar.xz /workdir/trilium-trans-release/trilium-linux-x64-server-latest.tar.xz
+        mv -f /workdir/trilium-trans-release/trilium-mac-x64-*.zip /workdir/trilium-trans-release/trilium-mac-x64-latest.zip
+        mv -f /workdir/trilium-trans-release/trilium-windows-x64-*.zip /workdir/trilium-trans-release/trilium-windows-x64-latest.zip
         ls
             
     - name: Create Release
