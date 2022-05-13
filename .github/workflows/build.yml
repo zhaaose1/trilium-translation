@@ -69,6 +69,7 @@ jobs:
         file: /workdir/trilium-trans/trilium-src/Dockerfile
         platforms: linux/arm64,linux/amd64
         push: true
-        tags: wrhsd/trilium-cn:${{ steps.tag.release_tag }}              
+        tags: |
+            wrhsd/trilium-cn:latest             
         
         
