@@ -26,6 +26,7 @@ jobs:
         npm install -g webpack
         npm install -g webpack-cli        
         sudo mkdir -p /workdir
+        sudo mkdir -p /workdir/trilium-trans-release
         sudo chmod -R 777 /workdir
         rm translations.py && cp translations_cn.py translations.py
         ls
@@ -35,7 +36,11 @@ jobs:
         git clone https://github.com/zadam/trilium.git /workdir/trilium-trans/trilium-src
         wget https://github.com/zadam/trilium/releases/download/v0.51.2/trilium-linux-x64-0.51.2.tar.xz
         tar -xf trilium-linux-x64-0.51.2.tar.xz && mv trilium-linux-x64 /workdir/trilium-trans/
-        cd /workdir/trilium-trans
+        cd /workdir/trilium-trans-release
+        wget https://github.com/zadam/trilium/releases/download/v0.51.2/trilium-linux-x64-0.51.2.tar.xz
+        wget https://github.com/zadam/trilium/releases/download/v0.51.2/trilium-linux-x64-server-0.51.2.tar.xz
+        wget https://github.com/zadam/trilium/releases/download/v0.51.2/trilium-mac-x64-0.51.2.zip
+        wget https://github.com/zadam/trilium/releases/download/v0.51.2/trilium-windows-x64-0.51.2.zip
         ls
         
     - name: Translate
@@ -75,4 +80,10 @@ jobs:
         tags: |
           wrhsd/trilium-cn:latest
           wrhsd/trilium-cn:${{ steps.date.outputs.today }} 
-        
+          
+    - name: Package
+      run: |
+        wget https://raw.githubusercontent.com/wrhsd1/files/main/make_release.py
+        python3 make_release.py    
+        cd /workdir/trilium-trans-release
+        ls
