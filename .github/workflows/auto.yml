@@ -32,11 +32,12 @@ jobs:
        
     - name: preUpload
       run: |
-        cd /workdir/trilium-trans-release
-        git mv trilium-linux-x64-*.xz trilium-linux-x64-latest.tar.xz
-        git mv trilium-linux-x64-server-*.tar.xz trilium-linux-x64-server-latest.tar.xz
-        git mv trilium-mac-x64-*.zip trilium-mac-x64-latest.zip
-        git mv trilium-windows-x64-*.zip trilium-windows-x64-latest.zip
+        cd /workdir/trilium-trans-release/
+        git mv /workdir/trilium-trans-release/trilium-linux-x64-*.xz /workdir/trilium-trans-release/trilium-linux-x64-latest.tar.xz
+        git mv /workdir/trilium-trans-release/trilium-linux-x64-server-*.tar.xz /workdir/trilium-trans-release/trilium-linux-x64-server-latest.tar.xz
+        git mv /workdir/trilium-trans-release/trilium-mac-x64-*.zip /workdir/trilium-trans-release/trilium-mac-x64-latest.zip
+        git mv /workdir/trilium-trans-release/trilium-windows-x64-*.zip /workdir/trilium-trans-release/trilium-windows-x64-latest.zip
+        ls
             
     - name: Create Release
       id: create_release
