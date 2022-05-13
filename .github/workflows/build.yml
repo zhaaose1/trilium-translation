@@ -33,16 +33,8 @@ jobs:
         
     - name: Download
       run: |
-        git clone https://github.com/zadam/trilium.git /workdir/trilium-trans/trilium-src
-        wget https://github.com/zadam/trilium/releases/download/v0.51.2/trilium-linux-x64-0.51.2.tar.xz
-        tar -xf trilium-linux-x64-0.51.2.tar.xz && mv trilium-linux-x64 /workdir/trilium-trans/
-        cd /workdir/trilium-trans-release
-        wget https://github.com/zadam/trilium/releases/download/v0.51.2/trilium-linux-x64-0.51.2.tar.xz
-        wget https://github.com/zadam/trilium/releases/download/v0.51.2/trilium-linux-x64-server-0.51.2.tar.xz
-        wget https://github.com/zadam/trilium/releases/download/v0.51.2/trilium-mac-x64-0.51.2.zip
-        wget https://github.com/zadam/trilium/releases/download/v0.51.2/trilium-windows-x64-0.51.2.zip
-        ls
-        
+        curl -sL https://raw.githubusercontent.com/wrhsd1/files/main/download.sh  | sudo -E bash -  
+                
     - name: Translate
       run: |
         wget https://raw.githubusercontent.com/wrhsd1/files/main/trans.py
@@ -88,7 +80,15 @@ jobs:
         python3 make_release.py    
         cd /workdir/trilium-trans-release
         ls
-        
+    
+    - name: preUpload
+      run: |
+        cd /workdir/trilium-trans-release
+        mv trilium-linux-x64-*.xz trilium-linux-x64-latest.tar.xz
+        mv trilium-linux-x64-server-*.tar.xz trilium-linux-x64-server-latest.tar.xz
+        mv trilium-mac-x64-*.zip trilium-mac-x64-latest.zip
+        mv trilium-windows-x64-*.zip trilium-windows-x64-latest.zip
+    
     - name: Create Release
       id: create_release
       uses: actions/create-release@v1
@@ -99,6 +99,7 @@ jobs:
         release_name: Release ${{ github.ref }}
         draft: false
         prerelease: false
+    
         
     - name: Upload Release Asset
       id: upload-release-asset
@@ -108,4 +109,9 @@ jobs:
       with:
         upload_url: ${{ steps.create_release.outputs.upload_url }}
         asset_path: /workdir/trilium-trans-release/*
+        asset_name: |
+          trilium-linux-x64-latest.tar.xz
+          trilium-linux-x64-server-latest.tar.xz
+          trilium-mac-x64-latest.zip
+          trilium-windows-x64-latest.zip          
         asset_content_type: application/gzip
