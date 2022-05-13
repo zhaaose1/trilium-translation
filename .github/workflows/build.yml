@@ -48,8 +48,16 @@ jobs:
       run: |
         cd /workdir/trilium-trans/trilium-src
         curl -sL https://raw.githubusercontent.com/wrhsd1/files/main/version.sh  | sudo -E bash -   
-        echo "::set-output name=release_tag::$VERSION"
-    
+        echo "::set-output name=release_tag::$VERSION"    
+    - name: Docker meta
+      id: docker_meta
+      uses: docker/metadata-action@v3
+      with:
+        images: wrhsd/trilium-cn
+        tags: |
+          type=semver,pattern={{ steps.tag.outputs.release_tag }}
+          flavor: |
+            latest=true
     - name: Set up QEMU
       uses: docker/setup-qemu-action@v2
 
@@ -69,9 +77,6 @@ jobs:
         file: /workdir/trilium-trans/trilium-src/Dockerfile
         platforms: linux/arm64,linux/amd64
         push: true
-        tags: |
-          wrhsd/trilium-cn:latest
-          wrhsd/trilium-cn:${{ steps.tag.outputs.release_tag }}
-        
+        tags: ${{ steps.docker_meta.outputs.tags }}              
         
         
