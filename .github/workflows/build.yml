@@ -56,8 +56,8 @@ jobs:
         images: wrhsd/trilium-cn
         tags: |
           type=semver,pattern={{ steps.tag.outputs.release_tag }}
-          flavor: |
-            latest=true
+        flavor: |
+          latest=true
     - name: Set up QEMU
       uses: docker/setup-qemu-action@v2
 
