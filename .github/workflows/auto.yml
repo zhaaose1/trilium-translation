@@ -29,9 +29,7 @@ jobs:
         
     - name: Package
       run: |
-        wget https://raw.githubusercontent.com/wrhsd1/files/main/maker.sh
         wget https://raw.githubusercontent.com/wrhsd1/files/main/make_release.py
-        bash maker.sh
         python3 make_release.py    
         cd /workdir/trilium-trans-release
         ls        
