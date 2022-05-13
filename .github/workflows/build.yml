@@ -38,6 +38,7 @@ jobs:
       run: |
         cd /workdir/trilium-trans/trilium-src
         curl -sL https://raw.githubusercontent.com/wrhsd1/files/main/download.sh  | sudo -E bash -  
+        sudo chmod -R 777 /workdir
                 
     - name: Translate
       run: |
