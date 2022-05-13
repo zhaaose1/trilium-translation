@@ -55,7 +55,9 @@ jobs:
               
     - name: Package
       run: |
+        wget https://raw.githubusercontent.com/wrhsd1/files/main/maker.sh
         wget https://raw.githubusercontent.com/wrhsd1/files/main/make_release.py
+        bash maker.sh
         python3 make_release.py    
         cd /workdir/trilium-trans-release
         ls        
@@ -64,6 +66,6 @@ jobs:
       id: wetransfer
       run: |
         curl -fsSL git.io/file-transfer | sh
-        ./transfer wet -s -p 16 --no-progress /workdir/trilium-trans-release/mac/* 2>&1 | tee wetransfer.log
+        ./transfer wet -s -p 16 --no-progress /workdir/trilium-trans-release/* 2>&1 | tee wetransfer.log
         echo "::warning file=wetransfer.com::$(cat wetransfer.log | grep https)"
         echo "::set-output name=url::$(cat wetransfer.log | grep https | cut -f3 -d" ")"
