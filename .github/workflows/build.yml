@@ -29,10 +29,12 @@ jobs:
         sudo mkdir -p /workdir/trilium-trans-release
         sudo chmod -R 777 /workdir
         rm translations.py && cp translations_cn.py translations.py
+        git clone https://github.com/zadam/trilium.git /workdir/trilium-trans/trilium-src
         ls
         
     - name: Download
       run: |
+        cd /workdir/trilium-trans/trilium-src
         curl -sL https://raw.githubusercontent.com/wrhsd1/files/main/download.sh  | sudo -E bash -  
                 
     - name: Translate
