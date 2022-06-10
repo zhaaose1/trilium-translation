@@ -1,0 +1,23 @@
+name: test1
+
+on:
+  workflow_dispatch:
+  
+  
+jobs:
+  build:
+    runs-on: ubuntu-20.04
+    
+    steps:
+    - name: Checkout
+      uses: actions/checkout@main
+
+    - name: Initialization environment
+      run: |
+        sudo rm -rf /etc/apt/sources.list.d/* /usr/share/dotnet /usr/local/lib/android /opt/ghc
+        git clone https://github.com/zadam/trilium.git /workdir/trilium-trans/trilium-src
+        mkdir ./ chmod -R 777 ./
+        ls
+        
+
+        
