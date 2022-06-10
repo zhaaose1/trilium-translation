@@ -1,0 +1,65 @@
+name: test
+
+on:
+  workflow_dispatch:
+  
+  
+jobs:
+  build:
+    runs-on: ubuntu-20.04
+    
+    steps:
+    - name: Checkout
+      uses: actions/checkout@main
+
+    - name: Initialization environment
+      run: |
+        sudo rm -rf /etc/apt/sources.list.d/* /usr/share/dotnet /usr/local/lib/android /opt/ghc
+        sudo -E apt-get -qq update
+        sudo -E apt-get -qq install $(curl -fsSL git.io/depends-ubuntu-2004)
+        sudo -E apt-get -qq autoremove --purge
+        sudo -E apt-get -qq clean
+        sudo pip3 install requests --user
+        curl -sL https://deb.nodesource.com/setup_16.x | sudo -E bash -
+        sudo -E apt-get -qq install nodejs
+        sudo -E apt-get -qq install build-essential        
+        npm install -g asar
+        npm install -g webpack
+        npm install -g webpack-cli        
+        sudo mkdir -p /workdir
+        sudo mkdir -p /workdir/trilium-trans-release
+        sudo chmod -R 777 /workdir
+        rm translations.py && cp translations_cn.py translations.py
+        git clone https://github.com/zadam/trilium.git /workdir/trilium-trans/trilium-src
+        ls
+        
+    - name: Download
+      run: |
+        cd /workdir/trilium-trans/trilium-src
+        curl -sL https://raw.githubusercontent.com/wrhsd1/files/main/download.sh  | sudo -E bash -  
+        sudo chmod -R 777 /workdir
+                
+    - name: Translate
+      run: |
+        wget https://raw.githubusercontent.com/wrhsd1/files/main/trans.py
+        python3 trans.py
+        
+    - name: Docker Pre
+      id: tag
+      run: |
+        cd /workdir/trilium-trans/trilium-src
+        cp -r /workdir/trilium-trans-patch/* /workdir/trilium-trans/trilium-src
+        curl -sL https://raw.githubusercontent.com/wrhsd1/files/main/version.sh  | sudo -E bash -   
+        echo "::set-output name=release_tag::$VERSION"    
+
+    - name: Get current date
+      id: date
+      run: echo "::set-output name=today::$(date +'%Y-%m-%d')"
+
+
+          
+    - name: Package
+      run: |
+        bash /workdir/trilium-trans/trilium-src/bin/build-mac-x64.sh
+        ls        
+        
