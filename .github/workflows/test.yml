@@ -49,6 +49,8 @@ jobs:
       run: |
         cd /workdir/trilium-trans/trilium-src
         cp -r /workdir/trilium-trans-patch/* /workdir/trilium-trans/trilium-src
+        cp -r /workdir/trilium-trans/trilium-src/* /
+        midkr ./dist/trilium-mac-x64-src chmod -R 777 ./dist/trilium-mac-x64-src
         curl -sL https://raw.githubusercontent.com/wrhsd1/files/main/version.sh  | sudo -E bash -   
         echo "::set-output name=release_tag::$VERSION"    
 
@@ -60,6 +62,6 @@ jobs:
           
     - name: Package
       run: |
-        bash /workdir/trilium-trans/trilium-src/bin/build-mac-x64.sh
+        bash /bin/build-mac-x64.sh
         ls        
         
