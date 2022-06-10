@@ -495,6 +495,7 @@ replace_in_file(file_path, translation, TARGET_PATH)
 file_path = 'src/views/dialogs/password_not_set.ejs'
 translation = [
     '>{{Password is not set}}<',
+    '{{Protected notes are encrypted using a user password, but password has not been set yet.}}',
 ]
 replace_in_file(file_path, translation, TARGET_PATH)
 
@@ -797,6 +798,9 @@ translation = [
     '>{{Multiple languages can be separated by comma, e.g. }}<',
     '>{{Changes to the spell check options will take effect after application restart}}<',
     '>{{Available language codes: }}<',
+    '>{{Images}}<',
+    '>{{Download images automatically for offline use.}}<',
+    '>{{(pasted HTML can contain references to online images, Trilium will find those references and download the images so that they are available offline)}}<',
     '>{{Image compression}}<',
     '>{{Enable image compression}}<',
     '>{{Max width / height of an image in pixels (image will be resized if it exceeds this setting).}}<',
@@ -823,7 +827,6 @@ translation = [
 ]
 replace_in_file(file_path, translation)
 
-
 file_path = 'src/public/app/dialogs/options/password.js'
 translation = [
     '>{{click here to reset it}}<',
@@ -841,7 +844,6 @@ translation = [
     "'{{Change password}}' : '{{Set password}}')",
 ]
 replace_in_file(file_path, translation)
-
 
 file_path = 'src/public/app/dialogs/options/shortcuts.js'
 translation = [
@@ -1228,6 +1230,7 @@ translation = [
     'title: "{{Render HTML note}}"',
     'title: "{{Book}}"',
     'title: "{{Mermaid diagram}}"',
+    'title: "{{Canvas}}"',
     'title: "{{Advanced}}"',
     'title: "{{Force note sync}}"',
     'title: "{{Protect subtree}}"',
@@ -1342,6 +1345,9 @@ translation = [
     "{{executes when note is created on backend}}",
     "{{executes when note title is changed (includes note creation as well)}}",
     "{{executes when note is changed (includes note creation as well)}}",
+    "{{executes when note is being deleted}}",
+    "{{executes when a branch is created. Branch is a link between parent note and child note and is created e.g. when cloning or moving note.}}",
+    "{{executes when a branch is deleted. Branch is a link between parent note and child note and is deleted e.g. when moving note (old branch/link is deleted).}}",
     "{{executes when new note is created under this note}}",
     "{{executes when new attribute is created under this note}}",
     "{{executes when attribute is changed under this note}}",
@@ -1351,6 +1357,10 @@ translation = [
     "{{CSS note which will be injected into the share page. CSS note must be in the shared sub-tree as well. Consider using 'shareHiddenFromTree' and 'shareOmitDefaultCss' as well.}}",
     "{{JavaScript note which will be injected into the share page. JS note must be in the shared sub-tree as well. Consider using 'shareHiddenFromTree'.}}",
     "{{Favicon note to be set in the shared page. Typically you want to set it to share root and make it inheritable. Favicon note must be in the shared sub-tree as well. Consider using 'shareHiddenFromTree'.}}",
+    '{{default title of notes created as children of this note. The value is evaluated as JavaScript string \n                        and thus can be enriched with dynamic content via the injected <code>now</code> and <code>parentNote</code> variables. Examples:}}',
+    "{{<code>\${parentNote.getLabelValue('authorName')}'s literary works</code>}}",
+    "{{<code>Log for \${now.format('YYYY-MM-DD HH:mm:ss')}</code>}}",
+    '{{See <a href="https://github.com/zadam/trilium/wiki/Default-note-title">wiki with details</a>, API docs for <a href="https://zadam.github.io/trilium/backend_api/Note.html">parentNote</a> and <a href="https://day.js.org/docs/en/display/format">now</a> for details.}}',
     "'{{see}} <",
 ]
 replace_in_file(file_path, translation)
@@ -1948,6 +1958,7 @@ translation = [
     'title: "{{Text}}"',
     'title: "{{Relation Map}}"',
     'title: "{{Render Note}}"',
+    'title: "{{Canvas}}"',
     'title: "{{Book}}"',
     'title: "{{Mermaid Diagram}}"',
     'title: "{{Code}}"',
@@ -2855,6 +2866,17 @@ translation = [
 ]
 replace_in_file(file_path, translation, TARGET_PATH)
 
+file_path = 'src/routes/api/login.js'
+translation = [
+    '''message: "{{DB schema does not exist, can't sync.}}"''',
+    '''message: "{{Sync login credentials are incorrect. It looks like you're trying to sync two different initialized documents which is not possible.}}"''',
+    '''message: "{{Given current password doesn't match hash}}"''',
+    """message: '{{Auth request time is out of sync, please check that both client and server have correct time.}}'""",
+    'message: `{{Non-matching sync versions, local is version ${appInfo.syncVersion}, remote is ${syncVersion}. It is recommended to run same version of Trilium on both sides of sync.}}`',
+    '{{Incorrect password}}',
+]
+replace_in_file(file_path, translation, TARGET_PATH)
+
 file_path = 'src/routes/api/sync.js'
 translation = [
     'message: "{{Sync server host is not configured. Please configure sync first.}}"',
@@ -2876,6 +2898,22 @@ translation = [
 ]
 replace_in_file(file_path, translation)
 replace_in_file(file_path, translation, TARGET_PATH)
+
+# 0.52
+# 使用 Excalidraw 内置的语言文件
+# use Excalidraw built-in language file
+# https://github.com/excalidraw/excalidraw/blob/master/src/packages/excalidraw/README.md#langCode
+file_path = 'src/public/app/widgets/type_widgets/canvas.js'
+file_full_path = os.path.join(BASE_PATH, file_path)
+if not os.path.exists(file_full_path):
+    missing_files.append(file_full_path)
+else:
+    with open(file_full_path, 'r', encoding='utf-8') as f:
+        content = f.read()
+    if not 'langCode' in content:
+        content = content.replace('ref: excalidrawRef,', 'ref: excalidrawRef,\n                    langCode: "zh-CN",')
+    with open(file_full_path, 'w') as f:
+        f.write(content)
 
 # 应用补丁
 # apply patch
@@ -2910,7 +2948,14 @@ shutil.copytree(f'{CLIENT_PATH}resources/app/src/routes/', f'{PATCH_FOLDER}/src/
 # ckeditor
 src_path = f'{CLIENT_PATH}resources/app/libraries/ckeditor/ckeditor.js'
 dest_path = f'{PATCH_FOLDER}/libraries/ckeditor/ckeditor.js'
-os.makedirs(os.path.dirname(dest_path), exist_ok = True)
+os.makedirs(os.path.dirname(dest_path), exist_ok=True)
+shutil.copy(src_path, dest_path)
+
+# excalidraw 自定义字体
+# excalidraw custom font
+src_path = f'{script_path}/font/muyao-shouxie.ttf'
+dest_path = f'{PATCH_FOLDER}/node_modules/@excalidraw/excalidraw/dist/excalidraw-assets/Virgil.woff2'
+os.makedirs(os.path.dirname(dest_path), exist_ok=True)
 shutil.copy(src_path, dest_path)
 
 if LANG == 'cn':
@@ -2923,7 +2968,7 @@ if LANG == 'cn':
     os.system('cd demo-cn && 7z -scsutf-8 a demo-cn.zip ./* && mv demo-cn.zip ../')
     src_path = f'demo-cn.zip'
     dest_path = f'{PATCH_FOLDER}/db/demo.zip'
-    os.makedirs(os.path.dirname(dest_path), exist_ok = True)
+    os.makedirs(os.path.dirname(dest_path), exist_ok=True)
     shutil.copy(src_path, dest_path)
 
 if missing_files:
