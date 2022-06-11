@@ -61,9 +61,7 @@ jobs:
     - name: Package
       run: |
         cd /workdir/trilium-trans/trilium-src
-        mkdir dist
-        mkdir dist/trilium-mac-x64-src 
-        chmod -R 777 dist
+        bash ./bin/build.sh
         bash ./bin/build-mac-x64.sh
         ls        
         
