@@ -61,6 +61,7 @@ jobs:
     - name: Package
       run: |
         mkdir dist
+        mkdir dist/trilium-src
         chmod -R 777 dist
         cp -r /workdir/trilium-trans/trilium-src dist/trilium-src
         cd dist/trilium-src
