@@ -65,7 +65,7 @@ jobs:
         chmod -R 777 dist
         cp -r /workdir/trilium-trans/trilium-src dist/trilium-src
         cd dist/trilium-src
-        bash ./bin/build.sh
-        bash ./bin/build-mac-x64.sh
+        bash bin/build.sh
+        bash bin/build-mac-x64.sh
         ls        
         
